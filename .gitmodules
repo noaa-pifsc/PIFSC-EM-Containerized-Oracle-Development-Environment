@@ -1,3 +1,6 @@
 [submodule "core/modules/CDS"]
 	path = core/modules/CDS
 	url = git@github.com:noaa-pifsc/PIFSC-Container-Deployment-System.git
+[submodule "projects/EM/modules/em-database"]
+	path = projects/EM/modules/em-database
+	url = git@github.com:WPacFIN/em-database.git

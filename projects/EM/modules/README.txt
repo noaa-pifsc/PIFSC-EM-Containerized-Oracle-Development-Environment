@@ -1,0 +1,1 @@
+This folder contains git submodules for a given project implementation

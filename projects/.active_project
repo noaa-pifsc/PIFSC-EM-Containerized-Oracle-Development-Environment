@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # define the active project name that corresponds to the folder name in the /projects folder that is the specific CODE fork that is the specific project that is deployed along with all of its dependencies that are also stored in the /projects folder
-ACTIVE_PROJECT_NAME=sandbox
+ACTIVE_PROJECT_NAME=EM

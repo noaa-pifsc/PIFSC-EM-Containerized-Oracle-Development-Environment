@@ -1,0 +1,1 @@
+This folder was created to define separate optional pre- and post-processing scripts for the scope (client, host, and container) that will be automatically executed before and after the main actions in the given scope.
