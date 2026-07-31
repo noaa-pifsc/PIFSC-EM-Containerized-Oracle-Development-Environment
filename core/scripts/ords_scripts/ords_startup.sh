@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e # Exit immediately on error
 
 # ords_startup.sh runs as the entrypoint to the CODE-ords.yml configuration file
 
@@ -12,16 +13,42 @@ if [ ! -f "${PW_FILE}" ]; then
 	exit 1
 fi
 
+# store the credentials and connection string
+SYS_PWD=$(cat "${PW_FILE}")
+DB_CONN="${DBHOST}:${DBPORT}/${DBSERVICENAME}"
+
 # wait for the code-db-ords-deploy Apex installation/upgrade process to finish
 echo "Waiting for database deployment to finish:"
 while [ ! -f /opt/oracle/ords/static/deployments/.deploy_ready_${DEPLOY_ID} ]; do
   sleep 5
   echo "Still waiting for database deployment to finish..."
 done
-echo "Apex installation/upgrade completed"
-export ORACLE_PWD=$(cat /run/secrets/oracle_pwd)
-export ORDS_PWD=$(cat /run/secrets/oracle_pwd)
-export ORACLE_USR_PWD=$(cat /run/secrets/oracle_pwd)
+echo "ORDS/Apex installation/upgrade completed"
+
+# define the password variable values
+export ORACLE_PWD=$(cat "${PW_FILE}")
+export ORDS_PWD=$(cat "${PW_FILE}")
+export ORACLE_USR_PWD=$(cat "${PW_FILE}")
+
+echo "Checking database readiness at ${DB_CONN}..."
+until sql -L "sys/${SYS_PWD}@//${DB_CONN} as sysdba" <<EOF > /dev/null 2>&1
+BEGIN
+  -- query for the ORDS_PUBLIC_USER and APEX_PUBLIC_USER accounts, loop through the schemas and set the password
+  FOR rec in (select username from dba_users WHERE username IN ('ORDS_PUBLIC_USER', 'APEX_PUBLIC_USER')) 
+  LOOP
+	-- attempt to set the password for the current schema
+    EXECUTE IMMEDIATE 'ALTER USER '||rec.username||' IDENTIFIED BY "${SYS_PWD}" ACCOUNT UNLOCK';
+  END LOOP;
+END;
+/
+EXIT;
+EOF
+do
+  echo "Database is not ready yet, retrying connection..."
+  sleep 2
+done
+
+echo "Apex/ORDS credentials have been synchronized"
 
 # create the default database pool configuration folder
 mkdir -p "${CONFIG_DIR}/databases/default"
@@ -68,4 +95,4 @@ echo "define the db password securely with the specified secret value"
 ords --config "${CONFIG_DIR}" config secret --password-stdin db.password < "${PW_FILE}"
 
 echo "Starting official ORDS entrypoint"
-docker-entrypoint.sh
+exec docker-entrypoint.sh "$@"
