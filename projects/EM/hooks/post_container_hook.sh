@@ -62,7 +62,7 @@ EOF
 
         # Loop until SQL*Plus returns '1' for the schema count, waiting retry_interval between each attempt
         until code_container_check_ords_ready "${sys_credentials}"; do
-            echo "ORDS has not been installed yet. Retrying in ${retry_interval}s..."
+            echo "ORDS has not been installed yet, waiting ${retry_interval} seconds..."
             sleep "${retry_interval}"
         done
 
