@@ -28,7 +28,7 @@ echo "ORDS/Apex installation/upgrade completed"
 # define the password variable values
 export ORACLE_PWD=$(cat "${PW_FILE}")
 export ORDS_PWD=$(cat "${PW_FILE}")
-export ORACLE_USR_PWD=$(cat "${PW_FILE}")
+export ORACLE_USER_PWD=$(cat "${PW_FILE}")
 
 echo "Checking database readiness at ${DB_CONN}..."
 until sql -L "sys/${SYS_PWD}@//${DB_CONN} as sysdba" <<EOF > /dev/null 2>&1

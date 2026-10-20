@@ -75,7 +75,7 @@ EOF
         # The elements should contain encoded values with the "|" character as the delimiter: sql path (within container)|sql script file|User Secret Name|Password Secret Name|Script Password Secrets (this can be one or more optional pipe-delimited secret names when a password is injected into the script - examples include a CREATE USER command) 
         DB_SCRIPTS_MAP+=("${BUILD_PATH}/../../projects/EM/modules/em-database/db|@dev_container_setup/create_docker_schemas.sql|oracle_admin_user|oracle_pwd|em_db_password_secret|em_app_password_secret")
         DB_SCRIPTS_MAP+=("${BUILD_PATH}/../../projects/EM/modules/em-database/db|@automated_deployments/deploy_dev_container.sql|em_db_username_secret|em_db_password_secret")
-        DB_SCRIPTS_MAP+=("${BUILD_PATH}/../../projects/EM/modules/em-database/db|@automated_deployments/deploy_dev_ords_container.sql|em_app_username_secret|em_app_password_secret")
+        DB_SCRIPTS_MAP+=("${BUILD_PATH}/../../projects/EM/modules/em-database/db|@automated_deployments/deploy_dev_ords_container.sql|em_app_username_secret|em_app_password_secret|em_app_client_id|em_app_issuer|em_app_audience|em_app_jwk_url|em_app_support_email")
 
         echo "execute the EM deployment scripts"
 
