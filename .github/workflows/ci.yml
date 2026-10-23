@@ -24,6 +24,7 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
+          cd ./projects/EM/modules/em-database/ords/testing/python/src
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -67,6 +68,7 @@ jobs:
           FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}  # Firebase Web API Key from Firebase Console
          
         run: |
+          cd ./projects/EM/modules/em-database/ords/testing/python/src
           pytest -v -s tests/
 
       # Ensure Swarm stack is cleaned up even if tests fail
