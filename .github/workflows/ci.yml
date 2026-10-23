@@ -61,7 +61,11 @@ jobs:
           DATA_DB_PASSWORD: ${{ secrets.EM_DB_PWD }}
           APP_DB_USER: ${{ secrets.EM_APP_USER }}
           APP_DB_PASSWORD: ${{ secrets.EM_APP_PWD }}
-          DB_DSN: "localhost:1521/FREEPDB1"
+          DB_DSN: ${{ secrets.DB_DSN }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          FIREBASE_SERVICE_ACCOUNT_EMAIL: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EMAIL }}
+          FIREBASE_WEB_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}  # Firebase Web API Key from Firebase Console
+         
         run: |
           pytest -v -s tests/
 
