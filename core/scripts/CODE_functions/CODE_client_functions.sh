@@ -198,12 +198,23 @@ function code_client_execute_container_scripts ()
 	
 	# check if this is a deployment, if so load the local secret file so the container secret(s) can be created
 	if [[ "${arg_ref[script_action]}" == "deploy" ]]; then
+		echo "This is a deployment, attempt to load the secrets.sh file"
+
 		# Check if the secret file exists:
 		if [ -f "${arg_ref[build_path]}/../../secrets/secrets.sh" ]; then
 			# load the secrets
 			source "${arg_ref[build_path]}"/../../secrets/secrets.sh
 		else
-			echo "Error: ${FUNCNAME[0]}() function could not load the secrets/secrets.sh file" >&2
+			echo "secrets.sh does not exist, check environment for the secret variables" >&2
+		fi
+		
+		# check for the required secret variables to determine if they are undefined or empty
+		local -n secret_map_ref="${arg_ref[secret_mapping_var_name]}"
+		
+		echo "check if the secret variables are defined" >&2
+		
+		if ! cds_shared_validate_required_vars "${secret_map_ref[@]}"; then
+			echo "Error: ${FUNCNAME[0]}() - Required environment variables mapped in 'SECRET_MAPPING_ARR' are not defined." >&2
 			return 1
 		fi
 	fi
