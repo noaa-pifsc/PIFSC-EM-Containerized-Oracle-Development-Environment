@@ -66,6 +66,9 @@ EOF
             sleep "${retry_interval}"
         done
 
+        echo "Pausing 5 seconds to allow ORDS metadata initialization..."
+        sleep 5
+
         echo "ORDS has been installed, run the custom EM database installation scripts"
 
         # define the database scripts map variable

@@ -17,3 +17,7 @@
 
 # ignore upstream changes to .active_project
 projects/.active_project merge=ours
+
+*.sh text eol=lf
+*.sql text eol=lf
+*.yml text eol=lf
